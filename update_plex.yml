@@ -1,10 +1,10 @@
 ---
-- name: Automate Plex Container Update
+- name: Automate Media Containers Update
   hosts: media
   gather_facts: false
   tasks:
     - name: Trigger the native community script update command
-      ansible.builtin.command: update
+      ansible.builtin.shell: update
       register: script_output
 
     - name: Stream the update results back to Semaphore
