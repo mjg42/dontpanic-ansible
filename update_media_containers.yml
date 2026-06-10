@@ -5,6 +5,8 @@
   tasks:
     - name: Trigger the native community script update command
       ansible.builtin.shell: update
+      environment:
+        TERM: xterm-256color
       register: script_output
 
     - name: Stream the update results back to Semaphore
