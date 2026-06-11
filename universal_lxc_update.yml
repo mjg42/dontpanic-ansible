@@ -1,15 +1,19 @@
 ---
-- name: Universal Proxmox LXC Container Update
-  hosts: proxmox_nodes
+- name: Universal Parallel Updater
+  hosts: all
   gather_facts: false
   tasks:
-    - name: Download and execute the global community scripts updater headlessly
-      ansible.builtin.shell: |
-        bash -c "$(curl -fsSL https://github.com/community-scripts/ProxmoxVE/raw/main/misc/update-apps.sh)" -- silent
+    - name: Run silent community script update command
+      ansible.builtin.shell: update
       environment:
         TERM: xterm-256color
-      register: global_update_output
+        PHS_SILENT: "1"
+      register: container_update_output
+      ignore_unreachable: true
+      # 🌟 THE TAG FILTER: Only run if the host has this exact variable set
+      when: update_style | default('') == 'script'
 
-    - name: Stream global upgrade summary to Semaphore console
+    - name: Stream upgrade summary back to Semaphore console
       ansible.builtin.debug:
-        var: global_update_output.stdout_lines
+        var: container_update_output.stdout_lines
+      when: update_style | default('') == 'script' and container_update_output.stdout_lines is defined
