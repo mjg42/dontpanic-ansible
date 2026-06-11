@@ -1,6 +1,6 @@
 ---
 - name: Universal Parallel Updater
-  hosts: all
+  hosts: all:!proxmox_nodes
   gather_facts: false
   tasks:
     - name: Run silent community script update command
