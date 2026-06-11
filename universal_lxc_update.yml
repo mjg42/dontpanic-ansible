@@ -1,0 +1,16 @@
+---
+- name: Universal Proxmox LXC Container Update
+  hosts: proxmox_nodes
+  gather_facts: false
+  tasks:
+    - name: Download and execute the global community scripts updater
+      ansible.builtin.shell: |
+        bash -c "$(curl -fsSL https://github.com/community-scripts/ProxmoxVE/raw/main/misc/update-apps.sh)"
+      environment:
+        TERM: xterm-256color
+        PHS_SILENT: "1"
+      register: global_update_output
+
+    - name: Stream global upgrade summary to Semaphore console
+      ansible.builtin.debug:
+        var: global_update_output.stdout_lines
