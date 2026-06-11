@@ -7,6 +7,7 @@
       ansible.builtin.shell: update
       environment:
         TERM: xterm-256color
+        PHS_SILENT: "1"
       register: script_output
 
     - name: Stream the update results back to Semaphore
