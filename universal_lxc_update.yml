@@ -3,12 +3,11 @@
   hosts: proxmox_nodes
   gather_facts: false
   tasks:
-    - name: Download and execute the global community scripts updater
+    - name: Download and execute the global community scripts updater headlessly
       ansible.builtin.shell: |
-        bash -c "$(curl -fsSL https://github.com/community-scripts/ProxmoxVE/raw/main/misc/update-apps.sh)"
+        bash -c "$(curl -fsSL https://github.com/community-scripts/ProxmoxVE/raw/main/misc/update-apps.sh)" -- silent
       environment:
         TERM: xterm-256color
-        PHS_SILENT: "1"
       register: global_update_output
 
     - name: Stream global upgrade summary to Semaphore console
